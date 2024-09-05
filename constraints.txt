@@ -29,3 +29,34 @@ Column staff_id (integer) is a primary key of the table staff
 Column address_id (smallint) is a foreign key of the table store and references column address_id (integer) of the table address
 Column manager_staff_id (smallint) is a foreign key of the table store and references column staff_id (integer) of the table staff
 Column store_id (integer) is a primary key of the table store
+Column actor_id (integer) is a primary key of the table actor
+Column address_id (integer) is a primary key of the table address
+Column city_id (smallint) is a foreign key of the table address and references column city_id (integer) of the table city
+Column category_id (integer) is a primary key of the table category
+Column city_id (integer) is a primary key of the table city
+Column country_id (smallint) is a foreign key of the table city and references column country_id (integer) of the table country
+Column country_id (integer) is a primary key of the table country
+Column address_id (smallint) is a foreign key of the table customer and references column address_id (integer) of the table address
+Column customer_id (integer) is a primary key of the table customer
+Column language_id (smallint) is a foreign key of the table film and references column language_id (integer) of the table language
+Column film_id (integer) is a primary key of the table film
+Column actor_id (smallint) is a foreign key of the table film_actor and references column actor_id (integer) of the table actor
+Column film_id (smallint) is a foreign key of the table film_actor and references column film_id (integer) of the table film
+Column category_id (smallint) is a foreign key of the table film_category and references column category_id (integer) of the table category
+Column film_id (smallint) is a foreign key of the table film_category and references column film_id (integer) of the table film
+Column film_id (smallint) is a foreign key of the table inventory and references column film_id (integer) of the table film
+Column inventory_id (integer) is a primary key of the table inventory
+Column language_id (integer) is a primary key of the table language
+Column customer_id (smallint) is a foreign key of the table payment and references column customer_id (integer) of the table customer
+Column payment_id (integer) is a primary key of the table payment
+Column rental_id (integer) is a foreign key of the table payment and references column rental_id (integer) of the table rental
+Column staff_id (smallint) is a foreign key of the table payment and references column staff_id (integer) of the table staff
+Column customer_id (smallint) is a foreign key of the table rental and references column customer_id (integer) of the table customer
+Column inventory_id (integer) is a foreign key of the table rental and references column inventory_id (integer) of the table inventory
+Column rental_id (integer) is a primary key of the table rental
+Column staff_id (smallint) is a foreign key of the table rental and references column staff_id (integer) of the table staff
+Column address_id (smallint) is a foreign key of the table staff and references column address_id (integer) of the table address
+Column staff_id (integer) is a primary key of the table staff
+Column address_id (smallint) is a foreign key of the table store and references column address_id (integer) of the table address
+Column manager_staff_id (smallint) is a foreign key of the table store and references column staff_id (integer) of the table staff
+Column store_id (integer) is a primary key of the table store
