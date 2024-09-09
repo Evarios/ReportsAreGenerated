@@ -3,7 +3,7 @@ from langchain_ollama import ChatOllama
 import subprocess
 import os
 
-from prompts import sql_prompt_template, code_prompt_template, code_template
+from app.prompts import sql_prompt_template, code_prompt_template, code_template
 
 def load_metadata(file_path: str) -> str:
     with open(file_path, 'r') as f:

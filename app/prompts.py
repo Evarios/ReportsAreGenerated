@@ -3,7 +3,7 @@ sql_prompt_template = """
 Generate a SQL query for PostgreSQL to answer [QUESTION]{question}[/QUESTION]
 
 ### Instructions
-- If you cannot answer the question with the available database schema, return 'I do not know'.
+- If you are not sure about the answer with the available database schema, return 'I do not know'.
 - Before You return the query, make sure that all tables are initialized.
 
 ### Database Schema
@@ -43,7 +43,7 @@ code_prompt_template = """
 Write a Python code which will handle following question: [QUESTION]{question}[/QUESTION]
 
 ### Instructions
-- Before You return the code, make sure that all variables are defined and the code is working.
+- Before You return the code, make sure that all variables are defined and you are using the correct columns and datatypes.
 - Use only matplotlib for plotting,
 - Always use plt.tight_layout() after plotting to ensure that the plot is not cut off.
 - Always save the plot as 'plot.png' in the current directory.
@@ -73,7 +73,7 @@ df = pd.read_sql("{query}", engine)
 # Finish your code here
 ```
 - Don't change anything in the code above.
-- Return only code.
+- Return ONLY code!
 
 ### Answer
 Here is the Python code that answers [QUESTION]{question}[/QUESTION]
