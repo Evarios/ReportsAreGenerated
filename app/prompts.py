@@ -4,7 +4,9 @@ Generate a SQL query for PostgreSQL to answer [QUESTION]{question}[/QUESTION]
 
 ### Instructions
 - If you are not sure about the answer with the available database schema, return 'I do not know'.
+- If the question is not clear, ask for clarification.
 - Before You return the query, make sure that all tables are initialized.
+- As an answer, return only the code.
 
 ### Database Schema
 The query will run on a database with the following schema:
@@ -28,7 +30,7 @@ USERNAME = os.getenv('PGUSERNAME')
 PASSWORD = os.getenv('PGPASSWORD')
 HOST = os.getenv('HOST')
 PORT = os.getenv('PORT')
-DATABASE = os.getenv('DATABASE')
+DATABASE = os.getenv('DATABASE').replace('"', '')
 URL = f'postgresql://{{USERNAME}}:{{PASSWORD}}@{{HOST}}:{{PORT}}/{{DATABASE}}'
 
 engine = create_engine(URL)
@@ -68,7 +70,7 @@ URL = f'postgresql://{{USERNAME}}:{{PASSWORD}}@{{HOST}}:{{PORT}}/{{DATABASE}}'
 
 engine = create_engine(URL)
 
-df = pd.read_sql("{query}", engine)
+df = pd.read_sql('{query}', engine)
 
 # Finish your code here
 ```

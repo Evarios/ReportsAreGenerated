@@ -1,20 +1,23 @@
 import os
 import subprocess
-from langchain_ollama import ChatOllama
+from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
 
 from prompts import sql_prompt_template, code_prompt_template, code_template
 
+load_dotenv()
 
 class Plotter:
     def __init__(self):
-        self.sql_llm = ChatOllama(model='sqlcoder:7b')
-        self.sql_prompt = PromptTemplate.from_template(sql_prompt_template)
-        self.sql_chain = self.sql_prompt | self.sql_llm
 
-        self.code_llm = ChatOllama(model='Niro/mistral-7b-python:latest')
+        self.model = ChatOpenAI(model='gpt-3.5-turbo', api_key=os.getenv('OPENAI_API_KEY'))
+                                        
+        self.sql_prompt = PromptTemplate.from_template(sql_prompt_template)
+        self.sql_chain = self.sql_prompt | self.model
+            
         self.code_prompt = PromptTemplate.from_template(code_prompt_template)
-        self.code_chain = self.code_prompt | self.code_llm
+        self.code_chain = self.code_prompt | self.model
 
 
     # ========================= PUBLIC METHODS ========================= #
@@ -25,24 +28,26 @@ class Plotter:
         sql_query = self.sql_chain.invoke({
             'question': question,
             'schema': schema,
-        }).content
+        })
 
-        return sql_query.strip().replace('<s> ', '')
+        return sql_query.content
     
     def generate_code(self, question: str, sql_query: str) -> str:
         code = self.code_chain.invoke({
             'question': question,
-            'query': sql_query,
-        }).content
+            'query': sql_query.replace('```sql', '').replace('```', '').replace('\n', ' '),
+        })
 
-        return code.replace('```python\n', '').replace('```', '')
+        return code.content
     
     def execute_code(self, file_path: str, code_template: str, sql_query: str, code: str) -> None:
 
         code_template = code_template.format(
-            query=sql_query,
-            code=code
+            query=sql_query.replace('```sql', '').replace('```', '').replace('\n', ' '),
+            code=code.replace('```python', '').replace('```', '')
         )
+
+        print(code_template)
 
         with open(file_path, 'w') as f:
             f.write(code_template)
@@ -52,7 +57,7 @@ class Plotter:
 
         print(result.stderr.decode('windows-1252'))
 
-        return result.stderr.decode('windows-1252'), len(result.stderr.decode('windows-1252'))
+        return result.stderr, len(result.stderr)
 
     
     # ========================= PRIVATE METHODS ========================= #
