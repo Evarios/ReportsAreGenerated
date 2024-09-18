@@ -40,11 +40,12 @@ class Plotter:
 
         return code.content
     
-    def execute_code(self, file_path: str, code_template: str, sql_query: str, code: str) -> None:
+    def execute_code(self, file_path: str, code_template: str, sql_query: str, code: str, database: str) -> None:
 
         code_template = code_template.format(
             query=sql_query.replace('```sql', '').replace('```', '').replace('\n', ' '),
-            code=code.replace('```python', '').replace('```', '')
+            code=code.replace('```python', '').replace('```', ''),
+            database=database
         )
 
         print(code_template)

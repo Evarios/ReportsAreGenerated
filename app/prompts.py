@@ -24,13 +24,14 @@ from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 from sqlalchemy import create_engine
 
-load_dotenv()
+
+load_dotenv('existing/{database}/.env', override=True, verbose=True)
 
 USERNAME = os.getenv('PGUSERNAME')
 PASSWORD = os.getenv('PGPASSWORD')
 HOST = os.getenv('HOST')
 PORT = os.getenv('PORT')
-DATABASE = os.getenv('DATABASE').replace('"', '')
+DATABASE = os.getenv('NAME').replace('"', '')
 URL = f'postgresql://{{USERNAME}}:{{PASSWORD}}@{{HOST}}:{{PORT}}/{{DATABASE}}'
 
 engine = create_engine(URL)
