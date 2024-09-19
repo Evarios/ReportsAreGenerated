@@ -1,10 +1,9 @@
 sql_prompt_template = """
 ### Task
-Generate a SQL query for PostgreSQL to answer [QUESTION]{question}[/QUESTION]
+Generate a SQL query for {dbms} to answer [QUESTION]{question}[/QUESTION]
 
 ### Instructions
 - If you are not sure about the answer with the available database schema, return 'I do not know'.
-- If the question is not clear, ask for clarification.
 - Before You return the query, make sure that all tables are initialized.
 - As an answer, return only the code.
 
@@ -32,7 +31,7 @@ PASSWORD = os.getenv('PGPASSWORD')
 HOST = os.getenv('HOST')
 PORT = os.getenv('PORT')
 DATABASE = os.getenv('NAME').replace('"', '')
-URL = f'postgresql://{{USERNAME}}:{{PASSWORD}}@{{HOST}}:{{PORT}}/{{DATABASE}}'
+URL = f'{url}'
 
 engine = create_engine(URL)
 
@@ -69,7 +68,7 @@ PASSWORD = os.getenv('PGPASSWORD')
 HOST = os.getenv('HOST')
 PORT = os.getenv('PORT')
 DATABASE = os.getenv('DATABASE')
-URL = f'postgresql://{{USERNAME}}:{{PASSWORD}}@{{HOST}}:{{PORT}}/{{DATABASE}}'
+URL = f'{url}'
 
 engine = create_engine(URL)
 

@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
-from prompts import sql_prompt_template, code_prompt_template, code_template
+from static.prompts import sql_prompt_template, code_prompt_template
+from static.urls import URL
 
 load_dotenv()
 
@@ -21,34 +22,35 @@ class Plotter:
 
 
     # ========================= PUBLIC METHODS ========================= #
-    def generate_sql_query(self, question: str, database: str) -> str:
+    def generate_sql_query(self, question: str, database: str, dbms: str) -> str:
 
         schema = self._fetch_metadata(f'existing/{database}/metadata.sql')
 
         sql_query = self.sql_chain.invoke({
             'question': question,
             'schema': schema,
+            'dbms': dbms
         })
 
         return sql_query.content
     
-    def generate_code(self, question: str, sql_query: str) -> str:
+    def generate_code(self, question: str, sql_query: str, dbms: str) -> str:
         code = self.code_chain.invoke({
             'question': question,
             'query': sql_query.replace('```sql', '').replace('```', '').replace('\n', ' '),
+            'url': URL[dbms]
         })
 
         return code.content
     
-    def execute_code(self, file_path: str, code_template: str, sql_query: str, code: str, database: str) -> None:
+    def execute_code(self, file_path: str, code_template: str, sql_query: str, code: str, database: str, dbms:str) -> None:
 
         code_template = code_template.format(
             query=sql_query.replace('```sql', '').replace('```', '').replace('\n', ' '),
             code=code.replace('```python', '').replace('```', ''),
-            database=database
+            database=database,
+            url=URL[dbms]
         )
-
-        print(code_template)
 
         with open(file_path, 'w') as f:
             f.write(code_template)

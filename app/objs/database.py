@@ -33,8 +33,20 @@ class Database:
 
     
     def get_added_databases(self):
+        if not Path('existing').exists():
+            Path('existing').mkdir()
         databases = [db.name for db in Path('existing').iterdir() if db.is_dir()]
         return databases
+    
+
+    def get_dbms(self, database):
+        try:
+            with open(f'existing/{database}/.env', 'r') as f:
+                lines = f.readlines()
+                config = {line.split('=')[0]: line.split('=')[1].strip().replace('"', '') for line in lines}
+            return config['DB_TYPE']
+        except FileNotFoundError:
+            return None
 
 
 
@@ -43,12 +55,12 @@ class Database:
     def _save_dotenv(self, save_path):
         """Save the database configuration to a .env file"""
         with open(save_path / '.env', 'w') as f:
-            f.write(f'PGUSERNAME={self.username}\n')
-            f.write(f'PGPASSWORD={self.password}\n')
-            f.write(f'HOST={self.host}\n')
-            f.write(f'PORT={self.port}\n')
-            f.write(f'NAME={self.database}\n')
-            f.write(f'DB_TYPE={self.db_type}\n')
+            f.write(f'PGUSERNAME="{self.username}"\n')
+            f.write(f'PGPASSWORD="{self.password}"\n')
+            f.write(f'HOST="{self.host}"\n')
+            f.write(f'PORT="{self.port}"\n')
+            f.write(f'NAME="{self.database}"\n')
+            f.write(f'DB_TYPE="{self.db_type}"\n')
 
     
     def _get_sql_metadata(self, dotenv_path):
@@ -67,9 +79,15 @@ class Database:
 
     def _filter_metadata(self, metadata_path):
         """Filter the SQL metadata"""
-        with open(metadata_path / 'metadata.sql', "r") as f:
-            metadata = f.read()
-            pattern = re.compile(r'CREATE TABLE[\s\S]*?;', re.MULTILINE)
+        try:
+            with open(metadata_path / 'metadata.sql', "r", encoding='utf-8') as f:
+                metadata = f.read()
+        except UnicodeDecodeError:
+            with open(metadata_path / 'metadata.sql', "r", encoding='utf-16') as f:
+                metadata = f.read()
+        finally:
+            metadata = metadata.replace('`', ' ').replace('਍ഀ', '')
+            pattern = re.compile(r"CREATE TABLE[\s\S]*?;", re.MULTILINE)
             matches = pattern.findall(metadata)
 
         with open(metadata_path / 'metadata.sql', 'w') as f:

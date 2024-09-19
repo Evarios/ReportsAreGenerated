@@ -9,12 +9,13 @@ def add_new_db():
         port = st.text_input('Port')
         db_name = st.text_input('Database Name')
 
-        db_system = st.selectbox('Database System', ['PostgreSQL', 'MySQL', 'SQLite'])
+        db_system = st.selectbox('Database System', ['PostgreSQL', 'MySQL'])
         submit = st.form_submit_button('Add Database')
 
         if submit:
             new_db = Database()
             new_db.add_new_config(username, password, host, port, db_name, db_system)
             submit = False
+            st.success('Database added successfully!')
 
 
