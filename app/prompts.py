@@ -43,6 +43,7 @@ df = pd.read_sql("{query}", engine)
 
 code_prompt_template = """
 ### Task
+Assume You are expirieced data visualisation engineer.
 Write a Python code which will handle following question: [QUESTION]{question}[/QUESTION]
 
 ### Instructions
@@ -52,6 +53,7 @@ Write a Python code which will handle following question: [QUESTION]{question}[/
 - Always save the plot as 'plot.png' in the current directory.
 - Always add legend to the plot.
 - Don't show plot in the end.
+- 
 - You must finish following code:
 ```python
 import os
