@@ -47,12 +47,12 @@ Write a Python code which will handle following question: [QUESTION]{question}[/
 
 ### Instructions
 - Before You return the code, make sure that all variables are defined and you are using the correct columns and datatypes.
-- Use only matplotlib for plotting,
+- Use only matplotlib for plotting.
+- IN PANDAS ALWAYS USE LOWER CASES FOR COLUMN NAMES AS A KEYS!
 - Always use plt.tight_layout() after plotting to ensure that the plot is not cut off.
 - Always save the plot as 'plot.png' in the current directory.
 - Always add legend to the plot.
 - Don't show plot in the end.
-- 
 - You must finish following code:
 ```python
 import os

@@ -30,9 +30,9 @@ class Plotter:
             'question': question,
             'schema': schema,
             'dbms': dbms
-        })
+        }).content
 
-        return sql_query.content
+        return sql_query if not dbms.startswith('Oracle') else sql_query.replace(';', '').strip(' ')
     
     def generate_code(self, question: str, sql_query: str, dbms: str) -> str:
         code = self.code_chain.invoke({
@@ -46,11 +46,13 @@ class Plotter:
     def execute_code(self, file_path: str, code_template: str, sql_query: str, code: str, database: str, dbms:str) -> None:
 
         code_template = code_template.format(
-            query=sql_query.replace('```sql', '').replace('```', '').replace('\n', ' '),
+            query=sql_query.replace('```sql', '').replace('```', '').replace('\n', ' ').replace('         ', ' '),
             code=code.replace('```python', '').replace('```', ''),
             database=database,
             url=URL[dbms]
         )
+
+        print(code_template)
 
         with open(file_path, 'w') as f:
             f.write(code_template)

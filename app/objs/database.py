@@ -11,6 +11,7 @@ class Database:
         self.port = None
         self.database = None
         self.db_type = None
+        self.how_to_connect = None
 
     # ============================== PUBLIC METHODS ============================== #
 
@@ -22,7 +23,7 @@ class Database:
         self.database = database
         self.db_type = db_type
 
-        save_path = Path(f'existing/{self.database}')
+        save_path = Path(f'existing/{self.database}') if not self.db_type.startswith('Oracle') else Path(f'existing/{self.username}')
 
         if not save_path.exists():
             save_path.mkdir()
@@ -53,7 +54,9 @@ class Database:
     # ============================== PRIVATE METHODS ============================== #
         
     def _save_dotenv(self, save_path):
+
         """Save the database configuration to a .env file"""
+
         with open(save_path / '.env', 'w') as f:
             f.write(f'PGUSERNAME="{self.username}"\n')
             f.write(f'PGPASSWORD="{self.password}"\n')
@@ -64,7 +67,9 @@ class Database:
 
     
     def _get_sql_metadata(self, dotenv_path):
+
         """Getting the SQL schema"""
+
         script_path = f'../scripts/{self.db_type}.ps1'
         pipeline = ['powershell.exe', 
                     '-ExecutionPolicy', 'Unrestricted', 
@@ -73,12 +78,21 @@ class Database:
                     '-username', self.username,
                     '-password', self.password,
                     '-name', self.database]
+        
+        if self.db_type.startswith('Oracle'):
+            params = {'host': self.host, 'port': self.port}
+            for k, v in params.items():
+                pipeline.append(f'-{k}')
+                pipeline.append(v)
+
         result = subprocess.run(pipeline)
         if result.returncode != 0:
             raise Exception(f'Error: {result.stderr}')
 
     def _filter_metadata(self, metadata_path):
+
         """Filter the SQL metadata"""
+
         try:
             with open(metadata_path / 'metadata.sql', "r", encoding='utf-8') as f:
                 metadata = f.read()
@@ -86,7 +100,7 @@ class Database:
             with open(metadata_path / 'metadata.sql', "r", encoding='utf-16') as f:
                 metadata = f.read()
         finally:
-            metadata = metadata.replace('`', ' ').replace('਍ഀ', '')
+            metadata = metadata.replace('`', ' ').replace('਍ഀ', '').replace('"', '').replace('\n\n\n', '')
             pattern = re.compile(r"CREATE TABLE[\s\S]*?;", re.MULTILINE)
             matches = pattern.findall(metadata)
 
