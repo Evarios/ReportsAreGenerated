@@ -11,17 +11,18 @@ class Database:
         self.port = None
         self.database = None
         self.db_type = None
-        self.how_to_connect = None
+        self.server_instance = None
 
     # ============================== PUBLIC METHODS ============================== #
 
-    def add_new_config(self, username, password, host, port, database, db_type):
+    def add_new_config(self, username, password, host, port, database, db_type, server_instance=None):
         self.username = username
         self.password = password
         self.host = host
         self.port = port
         self.database = database
         self.db_type = db_type
+        self.server_instance = server_instance
 
         save_path = Path(f'existing/{self.database}') if not self.db_type.startswith('Oracle') else Path(f'existing/{self.username}')
 
@@ -60,10 +61,13 @@ class Database:
         with open(save_path / '.env', 'w') as f:
             f.write(f'PGUSERNAME="{self.username}"\n')
             f.write(f'PGPASSWORD="{self.password}"\n')
-            f.write(f'HOST="{self.host}"\n')
-            f.write(f'PORT="{self.port}"\n')
             f.write(f'NAME="{self.database}"\n')
             f.write(f'DB_TYPE="{self.db_type}"\n')
+            if self.db_type == 'Microsoft SQL Server':
+                f.write(f'SERVER="{self.server_instance}"\n')
+            else:   
+                f.write(f'HOST="{self.host}"\n')
+                f.write(f'PORT="{self.port}"\n')
 
     
     def _get_sql_metadata(self, dotenv_path):
@@ -84,6 +88,10 @@ class Database:
             for k, v in params.items():
                 pipeline.append(f'-{k}')
                 pipeline.append(v)
+        
+        elif self.db_type == 'Microsoft SQL Server':
+            pipeline.append('-serverInstance')
+            pipeline.append(self.server_instance)
 
         result = subprocess.run(pipeline)
         if result.returncode != 0:

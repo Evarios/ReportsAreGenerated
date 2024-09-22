@@ -30,6 +30,7 @@ USERNAME = os.getenv('PGUSERNAME')
 PASSWORD = os.getenv('PGPASSWORD')
 HOST = os.getenv('HOST')
 PORT = os.getenv('PORT')
+SERVER = os.getenv('SERVER')
 DATABASE = os.getenv('NAME').replace('"', '')
 URL = f'{url}'
 
@@ -67,6 +68,7 @@ USERNAME = os.getenv('PGUSERNAME')
 PASSWORD = os.getenv('PGPASSWORD')
 HOST = os.getenv('HOST')
 PORT = os.getenv('PORT')
+SERVER = os.getenv('SERVER')
 DATABASE = os.getenv('DATABASE')
 URL = f'{url}'
 
