@@ -17,10 +17,16 @@ Aim of this project is to build a system capable to connect to any database and 
 
 <a name="db"></a>
 ## 1. Adding database connection. 
+At the very beginning You'll see layout like below:
 
+![image](https://github.com/user-attachments/assets/61cac8b0-be04-488a-a86b-c38f7fa8d10e)
+
+Reason of this is that You haven't added any database connection yet. To do this, go to ***Add new database*** tab. After that You'll see a form which You have to complete with appropriate data. General shape of form may be diffrent for each DBMS. It is caused of the diffrent ways to connect with this systems.
 
 <a name="oracle"></a>
 ### Oracle.
+
+
 
 
 <a name="MSQL"></a>
