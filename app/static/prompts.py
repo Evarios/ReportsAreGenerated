@@ -3,9 +3,10 @@ sql_prompt_template = """
 Generate a SQL query for {dbms} to answer [QUESTION]{question}[/QUESTION]
 
 ### Instructions
-- If you are not sure about the answer with the available database schema, return 'I do not know'.
+- Generate only SELECT queries. ABSOLUTELY DO NOT GENERATE ALTER, INSERT, DROP etc. queries
 - Before You return the query, make sure that all tables are initialized.
 - As an answer, return only the code.
+- If you are not sure about the answer with the available database schema, return 'I do not know'.
 
 ### Database Schema
 The query will run on a database with the following schema:
