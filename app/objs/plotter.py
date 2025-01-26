@@ -29,7 +29,6 @@ class Plotter:
         else:
             schema = self._fetch_metadata(f'existing/{database}/metadata.sql')
         self.update_plotter_templates(dbms)
-        print(self.sql_prompt)
 
 
         sql_query = self.sql_chain.invoke({
@@ -37,8 +36,6 @@ class Plotter:
             'schema': schema,
             'dbms': dbms
         }).content
-        print("HELLLLLO")
-        print(sql_query)
 
         if dbms.startswith('Oracle'):
             return sql_query.replace(';', '').strip(' ')
@@ -81,6 +78,7 @@ class Plotter:
             f.write(code_template)
 
         # result = subprocess.run(['python', file_path], stderr=subprocess.PIPE)
+        # Using venv python
         result = subprocess.run(["../../venv/Scripts/python.exe", 'plot.py'], stderr=subprocess.PIPE)
         os.remove(file_path)
 
