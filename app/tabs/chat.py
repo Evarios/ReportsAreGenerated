@@ -1,7 +1,9 @@
 import streamlit as st
 from objs.plotter import Plotter
 from objs.database import Database
-from static.prompts import code_template
+
+import os
+from static.prompts import code_template, non_sql_code_template
 
 
 def chat():
@@ -29,7 +31,6 @@ def chat():
     if not dbms:
         st.write('Database not found. Please add a new database configuration.')
         return
-
     # Chat input box
     if prompt := st.chat_input("What do you want to plot?"):
         # Save user input to chat history
@@ -69,3 +70,5 @@ def chat():
             else:
                 st.chat_message("assistant").markdown(
                     f"An error occurred during code execution:\n```\n{message.decode()}\n```")
+
+        

@@ -31,7 +31,8 @@ class Database:
 
         self._save_dotenv(save_path)
         self._get_sql_metadata(save_path)
-        self._filter_metadata(save_path)
+        if not self.db_type.startswith('Mongo'):
+            self._filter_metadata(save_path)
 
     
     def get_added_databases(self):
@@ -75,15 +76,19 @@ class Database:
         """Getting the SQL schema"""
 
         script_path = f'../scripts/{self.db_type}.ps1'
+        if self.db_type.startswith('Mongo'):
+            file_name = 'metadata.txt'
+        else:
+            file_name = 'metadata.sql'
         pipeline = ['powershell.exe', 
                     '-ExecutionPolicy', 'Unrestricted', 
                     '-File', script_path,
-                    '-savePath', dotenv_path / 'metadata.sql', 
+                    '-savePath', dotenv_path / file_name,
                     '-username', self.username,
                     '-password', self.password,
                     '-name', self.database]
         
-        if self.db_type.startswith('Oracle'):
+        if self.db_type.startswith('Oracle') or self.db_type.startswith('Mongo'):
             params = {'host': self.host, 'port': self.port}
             for k, v in params.items():
                 pipeline.append(f'-{k}')
