@@ -30,6 +30,9 @@ class Plotter:
             'question': question,
             'schema': schema,
             'dbms': dbms
+
+
+            
         }).content
 
         return sql_query if not dbms.startswith('Oracle') else sql_query.replace(';', '').strip(' ')
@@ -56,8 +59,9 @@ class Plotter:
 
         with open(file_path, 'w') as f:
             f.write(code_template)
-
-        result = subprocess.run(['python', file_path], stderr=subprocess.PIPE)
+        python_path = "C:\\Users\\janbr\\Documents\\Repos\\ReportsAreGenerated\\venv\\Scripts\\python.exe"
+        #result = subprocess.run(['python', file_path], stderr=subprocess.PIPE)
+        result = subprocess.run([python_path, file_path], stderr=subprocess.PIPE)
         os.remove(file_path)
 
         print(result.stderr.decode('windows-1252'))
