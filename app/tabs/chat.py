@@ -47,8 +47,7 @@ def chat():
         sql_query = st.session_state['plotter'].generate_sql_query(
             prompt, database, dbms)
         with st.chat_message("assistant"):
-            st.markdown(f"Here is the generated SQL query:\n```sql\n{
-                        sql_query}\n```")
+            st.markdown(f"Here is the generated SQL query:\n```sql\n{sql_query}\n```")
 
         if sql_query != 'I do not know.':
             # Generate Python code for plotting
