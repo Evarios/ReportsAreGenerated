@@ -79,7 +79,7 @@ class Database:
         if self.db_type.startswith('Mongo'):
             file_name = 'metadata.txt'
         else:
-            save_path = 'metadata.sql'
+            file_name = 'metadata.sql'
         pipeline = ['powershell.exe', 
                     '-ExecutionPolicy', 'Unrestricted', 
                     '-File', script_path,
