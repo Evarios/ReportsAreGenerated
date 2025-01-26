@@ -1,8 +1,8 @@
 import streamlit as st
 from objs.plotter import Plotter
 from objs.database import Database
-
-from static.prompts import code_template
+import os
+from static.prompts import code_template, non_sql_code_template
 
 
 def chat():
@@ -30,6 +30,12 @@ def chat():
                 st.write('Generating plot...')
                 code = st.session_state['plotter'].generate_code(query, sql_query, dbms)
                 st.write(code)
-                message, status = st.session_state['plotter'].execute_code('plot.py', code_template, sql_query, code, database, dbms)
+                if dbms.startswith('Mongo'):
+                    message, status = st.session_state['plotter'].execute_code('plot.py', non_sql_code_template, sql_query,
+                                                                               code, database, dbms)
+                else:
+                    message, status = st.session_state['plotter'].execute_code('plot.py', code_template, sql_query,
+                                                                               code, database, dbms)
                 st.image('plot.png')
+                os.remove('plot.png')
                 submit = False

@@ -10,7 +10,7 @@ def add_new_db():
 
     username = st.text_input('Username')
     password = st.text_input('Password', type='password')
-    db_system = st.selectbox('Database System', ['Oracle', 'PostgreSQL', 'MySQL', 'Microsoft SQL Server'])
+    db_system = st.selectbox('Database System', ['Oracle', 'PostgreSQL', 'MySQL', 'Microsoft SQL Server', 'MongoDB'])
 
     # MS SQL form
     if db_system == 'Microsoft SQL Server':
@@ -24,7 +24,7 @@ def add_new_db():
         how_to_connect = st.radio('How to connect?', ['SID', 'SERVICE_NAME'])
         db_name = st.text_input(how_to_connect)
 
-    # PostgreSQL and MySQL form
+    # PostgreSQL,MySQL and MongoDB form
     else:
         host = st.text_input('Host')
         port = st.text_input('Port')
